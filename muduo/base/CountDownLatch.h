@@ -6,12 +6,13 @@
 #ifndef MUDUO_BASE_COUNTDOWNLATCH_H
 #define MUDUO_BASE_COUNTDOWNLATCH_H
 
-#include "muduo/base/Condition.h"
-#include "muduo/base/Mutex.h"
+#include <mutex>
+#include <condition_variable>
+#include "muduo/base/noncopyable.h"
 
 namespace muduo
 {
-
+// implement with c++11
 class CountDownLatch : noncopyable
 {
  public:
@@ -25,9 +26,9 @@ class CountDownLatch : noncopyable
   int getCount() const;
 
  private:
-  mutable MutexLock mutex_;
-  Condition condition_ GUARDED_BY(mutex_);
-  int count_ GUARDED_BY(mutex_);
+  mutable std::mutex mutex_;
+  std::condition_variable condition_;
+  int count_;
 };
 
 }  // namespace muduo
